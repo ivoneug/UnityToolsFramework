@@ -6,8 +6,8 @@ namespace Framework.Events
     [CreateAssetMenu]
     public class GameEvent : ScriptableObject
     {
-        [SerializeField]
-        private bool active = true;
+        [SerializeField] private bool active = true;
+        [SerializeField] private GameEventValidator[] validators;
 
         /// <summary>
         /// The list of listeners that this event will notify if it is raised.
@@ -19,6 +19,13 @@ namespace Framework.Events
             if (!active)
             {
                 return;
+            }
+            foreach (var validator in validators)
+            {
+                if (!validator.Validate())
+                {
+                    return;
+                }
             }
 
             try
